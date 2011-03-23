@@ -63,8 +63,7 @@ int main(int argc, char *argv[]){
 
   int sum = 0;
   int i = 0;
-  cout << fif(9) * 6 << endl;
-  /* 59049
+  //cout << fif(9) * 6 << endl;
   REP(m,10){
     REP(l,10){
       REP(i,10){
@@ -75,7 +74,7 @@ int main(int argc, char *argv[]){
                 int n = m * 1000000 + l * 100000 + i * 10000 + j * 1000 + k * 100 + x * 10 + y;
                 //cout << n << endl;
                 if(n == fif(i) + fif(j) + fif(k) + fif(x) + fif(y) + fif(m) + fif(l)){
-                  cout << n << endl;
+                  //cout << n << endl;
                   sum += n;
                 }
               }
@@ -85,7 +84,6 @@ int main(int argc, char *argv[]){
       }
     }
   }
-  */
   cout << sum << endl;
   return 0;
 }

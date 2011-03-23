@@ -67,7 +67,6 @@ int dfs(int i, int j){
   int res = g[i][j];
   res += max(dfs(i+1,j), dfs(i+1,j+1));
   return dp[i][j] = res;
-  return res;
 }
 
 int main(int argc, char *argv[]){

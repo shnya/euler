@@ -53,31 +53,14 @@ const double PI  = acos(-1.0);
 
 
 
-LLI dp[21][21];
-#define MAX 20
+
 
 int main(int argc, char *argv[]){
   ios::sync_with_stdio(false); 
-
-  CLR(dp);
-  for(int i = 0; i <= MAX; i++){
-    dp[i][MAX] = 1;
-    dp[MAX][i] = 1;
+  string s = "0123456789";
+  for(int i = 0; i < 1000000 - 1; i++){
+    next_permutation(s.begin(), s.end());
   }
-
-  for(int i = MAX - 1; i >= 0; i--){
-    for(int j = MAX - 1; j >= 0; j--){
-      dp[i][j] = dp[i+1][j] + dp[i][j+1];
-    }
-  }
-
-  for(int i = 0; i <= MAX; i++){
-    for(int j = 0; j <= MAX; j++){
-      //cout << dp[i][j] << " ";
-    }
-    //cout << endl;
-  }
-  cout << dp[0][0] << endl;
-
+  cout << s << endl;
   return 0;
 }

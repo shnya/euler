@@ -52,32 +52,28 @@ const double PI  = acos(-1.0);
 #define debug(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << " " << __FILE__ << endl;
 
 
+int sum_div(int n){
+  int sum = 0;
+  for(int i = 1; i < n; i++){
+    if(n % i == 0) sum += i;
+  }
+  return sum;
+}
 
-LLI dp[21][21];
-#define MAX 20
 
 int main(int argc, char *argv[]){
   ios::sync_with_stdio(false); 
+ 
+  int c = 0;
+  cout << sum_div(220) << "\t" << sum_div(284) << endl;
 
-  CLR(dp);
-  for(int i = 0; i <= MAX; i++){
-    dp[i][MAX] = 1;
-    dp[MAX][i] = 1;
-  }
-
-  for(int i = MAX - 1; i >= 0; i--){
-    for(int j = MAX - 1; j >= 0; j--){
-      dp[i][j] = dp[i+1][j] + dp[i][j+1];
+  for(int i = 1; i <= 10000; i++){
+    int b = sum_div(i);
+    if(i != b && sum_div(b) == i){
+      c += i;
     }
   }
-
-  for(int i = 0; i <= MAX; i++){
-    for(int j = 0; j <= MAX; j++){
-      //cout << dp[i][j] << " ";
-    }
-    //cout << endl;
-  }
-  cout << dp[0][0] << endl;
-
+  cout << c << endl;
+  
   return 0;
 }

@@ -52,32 +52,41 @@ const double PI  = acos(-1.0);
 #define debug(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << " " << __FILE__ << endl;
 
 
+#include <cassert>
 
-LLI dp[21][21];
-#define MAX 20
+int dp[12345678];
+
+int dfs(LLI n){
+  //assert(n > 0);
+  if(n >= 10000000) cout << "test" << endl;
+  if(n > 0 && n < 10000000 && dp[n] != 0){
+    return dp[n];
+  }
+
+  if(n == 1) return 0;
+  int res = 1;
+  if(n % 2 == 0){
+    res += dfs(n/2);
+  }else{
+    res += dfs(3*n+1);
+  }
+  return n < 10000000 ? dp[n] = res : res;
+}
+
 
 int main(int argc, char *argv[]){
-  ios::sync_with_stdio(false); 
-
+  ios::sync_with_stdio(false);
   CLR(dp);
-  for(int i = 0; i <= MAX; i++){
-    dp[i][MAX] = 1;
-    dp[MAX][i] = 1;
-  }
 
-  for(int i = MAX - 1; i >= 0; i--){
-    for(int j = MAX - 1; j >= 0; j--){
-      dp[i][j] = dp[i+1][j] + dp[i][j+1];
+  int maxc=0,maxn=0;
+  FOR(i,2,1000001){
+    int c = dfs(i);
+    if(maxc < c){
+      maxn = i;
+      maxc = c;
     }
   }
 
-  for(int i = 0; i <= MAX; i++){
-    for(int j = 0; j <= MAX; j++){
-      //cout << dp[i][j] << " ";
-    }
-    //cout << endl;
-  }
-  cout << dp[0][0] << endl;
-
+  cout << maxn << endl;
   return 0;
 }

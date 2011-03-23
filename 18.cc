@@ -19,6 +19,8 @@
 #include <string>
 #include <cstring>
 #include <ctime>
+#include <fstream>
+
 
 using namespace std;
 
@@ -52,32 +54,40 @@ const double PI  = acos(-1.0);
 #define debug(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << " " << __FILE__ << endl;
 
 
+vector<vector<int> > g;
+int dp[16][16];
 
-LLI dp[21][21];
-#define MAX 20
+int dfs(int i, int j){
+  if(dp[i][j] != 0){
+    return dp[i][j];
+  }
+  if(i == g.size() - 1){
+    return g[i][j];
+  }
+  int res = g[i][j];
+  res += max(dfs(i+1,j), dfs(i+1,j+1));
+  return dp[i][j] = res;
+  return res;
+}
 
 int main(int argc, char *argv[]){
   ios::sync_with_stdio(false); 
-
   CLR(dp);
-  for(int i = 0; i <= MAX; i++){
-    dp[i][MAX] = 1;
-    dp[MAX][i] = 1;
-  }
-
-  for(int i = MAX - 1; i >= 0; i--){
-    for(int j = MAX - 1; j >= 0; j--){
-      dp[i][j] = dp[i+1][j] + dp[i][j+1];
+  ifstream ifs("18.txt");
+  for(int i = 0; i < 15; i++){
+    vector<int> v;
+    for(int j = 0; j < i + 1; j++){
+      int n;
+      ifs >> n;
+      v.push_back(n);
+      //cout << n << " ";
     }
-  }
-
-  for(int i = 0; i <= MAX; i++){
-    for(int j = 0; j <= MAX; j++){
-      //cout << dp[i][j] << " ";
-    }
+    g.push_back(v);
     //cout << endl;
   }
-  cout << dp[0][0] << endl;
+
+  int total = dfs(0,0);
+  cout << total << endl;
 
   return 0;
 }

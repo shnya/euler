@@ -52,32 +52,37 @@ const double PI  = acos(-1.0);
 #define debug(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << " " << __FILE__ << endl;
 
 
+// 0 Mon 1 Tue 2 Wed 3 Thu 4 Fri 5 Sat 6 Sun
 
-LLI dp[21][21];
-#define MAX 20
+
+int getDays(int y, int m){
+  if(m == 4 || m == 6 || m == 9 || m == 11){
+    return 30;
+  }else if(m == 2){
+    if(y % 4 == 0 && (y % 100 != 0 || y % 400 == 0)){
+      return 29;
+    }else{
+      return 28;
+    }
+  }else{
+    return 31;
+  }
+}
 
 int main(int argc, char *argv[]){
   ios::sync_with_stdio(false); 
-
-  CLR(dp);
-  for(int i = 0; i <= MAX; i++){
-    dp[i][MAX] = 1;
-    dp[MAX][i] = 1;
-  }
-
-  for(int i = MAX - 1; i >= 0; i--){
-    for(int j = MAX - 1; j >= 0; j--){
-      dp[i][j] = dp[i+1][j] + dp[i][j+1];
+  int n = -1;
+  int c = 0;
+  for(int y = 1900; y <= 2000; y++){
+    for(int m = 1; m <= 12; m++){
+      //cout << y << ' ' << m << ' ' << getDays(y,m) << endl;
+      for(int d = 1; d <= getDays(y,m); d++){
+        n++;
+        n %= 7;
+        if(n == 6 && d == 1 && y > 1900) c++;
+      }
     }
   }
-
-  for(int i = 0; i <= MAX; i++){
-    for(int j = 0; j <= MAX; j++){
-      //cout << dp[i][j] << " ";
-    }
-    //cout << endl;
-  }
-  cout << dp[0][0] << endl;
-
+  cout << c << endl;
   return 0;
 }

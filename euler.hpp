@@ -467,7 +467,7 @@ namespace euler {
     }
 
     const BigInt& denominator(void) const {
-      return n;
+      return d;
     }
 
     Frac& operator=(const Frac &f){

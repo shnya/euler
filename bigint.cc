@@ -25,8 +25,8 @@ int main(int argc, char *argv[])
   Frac a(1,2);
   int sum = 0;
   for(int i = 0; i < 1000; i++){
-    cout << Frac(1) + a << endl;
-    a = Frac(2) + (Frac(1) / a);
+    cout << 1 + a << endl;
+    a = 2 + (1 / a);
   }
 
   return 0;

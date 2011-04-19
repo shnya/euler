@@ -454,7 +454,11 @@ namespace euler {
     }
 
   public:
-    Frac(BigInt _n = 0, BigInt _d = 1) : n(_n), d(_d){
+    Frac(BigInt _n = BigInt(0), BigInt _d = BigInt(1)) : n(_n), d(_d){
+      divided();
+    };
+
+    Frac(long _n = 0, long _d = 1) : n(BigInt(_n)), d(BigInt(_d)){
       divided();
     };
 

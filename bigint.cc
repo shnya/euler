@@ -32,9 +32,10 @@ int main(int argc, char *argv[])
   int sum = 0;
   for(int i = 0; i < 1000; i++){
     //cout << 1 + a << endl;
-    a = 2 + (1 / a);
-    int nlen = len(a.numerator());
-    int dlen = len(a.denominator());
+    a = 1 / (2 + a);
+    Frac c = 1 + a;
+    int nlen = c.numerator().str().size();
+    int dlen = c.denominator().str().size();
     cout << nlen << " " << dlen << endl;
     if(nlen > dlen){
       sum++;

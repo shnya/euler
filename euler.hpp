@@ -285,6 +285,12 @@ namespace euler {
       return is_minus;
     }
 
+    std::string str(void) const {
+      std::ostringstream os;
+      os << *this;
+      return os.str();
+    }
+
     friend bool operator==(const BigInt &x, const BigInt &y);
     friend bool operator!=(const BigInt &x, const BigInt &y);
     friend bool operator>(const BigInt &x, const BigInt &y);

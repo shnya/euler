@@ -462,11 +462,11 @@ namespace euler {
       divided();
     };
 
-    BigInt numerator(void) const {
+    const BigInt& numerator(void) const {
       return n;
     }
 
-    BigInt denominator(void) const {
+    const BigInt& denominator(void) const {
       return n;
     }
 

@@ -1,3 +1,6 @@
+#ifndef EULER_HPP
+#define EULER_HPP
+
 #include <vector>
 #include <algorithm>
 #include <iostream>
@@ -412,39 +415,69 @@ namespace euler {
     }
     return x;
   }
-}
 
-
-template<class T>
-std::ostream &operator<<(std::ostream &o,const std::vector<T> &v){
-  o << "[";
-  for(int i = 0;i < int(v.size());i++)
-    o << v[i] << (i < int(v.size())-1 ? ",":"");
-  return o << "]";
-}
-
-int main(int argc, char *argv[])
-{
-  using namespace euler;
-  BigInt x(2);
-  x = fact(1000);
-  std::cout << x << std::endl;
-  /*
-    long y = 1;
-    for(int i = 2; i < 10; i++){
-    y *= i;
+  class Frac {
+    BigInt n,d;
+    static BigInt _gcd(BigInt m, BigInt n){
+      BigInt temp;
+      while(1){
+        temp = n;
+        n = m % n;
+        m = temp;
+        if(n == 0)
+          break;
+      }
+      return n;
     }
-    cout << y << endl;
-  */
-  /*
-    ostringstream os;
-    os << x;
-    string s(os.str());
-    int sum = 0;
-    for(size_t i = 0; i < s.size(); i++){
-    sum += s[i] - '0';
+
+    static BigInt _lcm (BigInt m, BigInt n){
+      return m * n / _gcd(m,n);
     }
-    cout << sum << endl;
-  */
-  return 0;
+
+    void divided(){
+      BigInt m = _gcd(n,d);
+      if(d < 0){
+        d = -d;
+        n = -n;
+      }
+      n /= m;
+      d /= m;
+    }
+
+  public:
+    Frac(BigInt _n = 0, BigInt _d = 1) : n(_n), d(_d){
+      divided();
+    };
+
+    friend Frac operator+(const Frac &a, const Frac &b);
+    friend Frac operator-(const Frac &a, const Frac &b);
+    friend Frac operator*(const Frac &a, const Frac &b);
+    friend Frac operator/(const Frac &a, const Frac &b);
+    friend std::ostream& operator<<(std::ostream &o, const Frac &a);
+  };
+
+  Frac operator+(const Frac &a, const Frac &b){
+    BigInt m = Frac::_lcm(a.d,b.d);
+    return Frac((a.n * (m / a.d)) + (b.n * (m / b.d)), m);
+  }
+
+  Frac operator-(const Frac &a, const Frac &b){
+    BigInt m = Frac::_lcm(a.d,b.d);
+    return Frac((a.n * (m / a.d)) - (b.n * (m / b.d)), m);
+  }
+
+  Frac operator*(const Frac &a, const Frac &b){
+    return Frac(a.n * b.n, a.d * b.d);
+  }
+
+  Frac operator/(const Frac &a, const Frac &b){
+    return Frac(a.n * b.d, a.d * b.n);
+  }
+
+  std::ostream& operator<<(std::ostream &o, const Frac &a){
+    o << a.n << "/" << a.d;   return o;
+  }
 }
+
+
+#endif /* EULER_HPP */

@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 
+
 namespace euler {
   class BigInt {
     typedef unsigned short US;
@@ -83,6 +84,8 @@ namespace euler {
       }
       if(carry)
         digits.push_back(carry);
+      while(digits.size() != 0 && digits.back() == 0)
+        digits.pop_back();
       return *this;
     }
 
@@ -127,14 +130,13 @@ namespace euler {
     BigInt& divider(const BigInt &yy){
       BigInt y = yy, x = *this;
       int count = 0;
+      if(x < 0) x = -x;
+      if(y < 0) y = -y;
       if(y == 0){
-        is_minus = false;
-        digits.clear();
-        return *this;
+        throw "floating point error";
       }else if(y == 1){
         return *this;
       }
-
       while(x >= y){
         count++;
         lshift(y,1);
@@ -158,8 +160,9 @@ namespace euler {
         }
         x -= (y * div);
         while(div > 0){
-          if(x >= 0)
+          if(x >= 0){
             break;
+          }
           x += y;
           --div;
         }
@@ -233,7 +236,7 @@ namespace euler {
     BigInt& operator-=(const BigInt &y){
       bool y_is_minus = !y.is_minus;
       if(is_minus ^ y_is_minus){
-        if(digit_compare(y) >= 0){  
+        if(digit_compare(y) >= 0){
           return subtractor(this, &y);
         }else{
           is_minus = !is_minus;
@@ -347,7 +350,7 @@ namespace euler {
     int flg_compare = x.flg_compare(y);
     int digit_compare = x.digit_compare(y);
     if(x.is_minus) digit_compare = -digit_compare;
-    return flg_compare < 0 ||
+    return flg_compare > 0 ||
       (flg_compare == 0 && x.digit_compare(y) >= 0);
   }
 

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <stdexcept>
+
 
 namespace euler {
   class BigInt {
@@ -132,7 +134,7 @@ namespace euler {
       if(x < 0) x = -x;
       if(y < 0) y = -y;
       if(y == 0){
-        throw "floating point error";
+        throw std::runtime_error("floating point error");
       }else if(y == 1){
         return *this;
       }

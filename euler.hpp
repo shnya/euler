@@ -8,7 +8,6 @@
 #include <sstream>
 
 namespace euler {
-
   class BigInt {
     typedef unsigned short US;
     typedef unsigned int UI;
@@ -394,7 +393,7 @@ namespace euler {
       else
         break;
     }
-    return o << s.substr(pos);
+    return o << (x.is_minus ? "-" : "") << s.substr(pos);
   }
 
   BigInt pow(const BigInt &xx, unsigned long n){
@@ -478,6 +477,5 @@ namespace euler {
     o << a.n << "/" << a.d;   return o;
   }
 }
-
 
 #endif /* EULER_HPP */

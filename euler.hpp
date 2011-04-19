@@ -7,7 +7,6 @@
 #include <string>
 #include <sstream>
 
-
 namespace euler {
   class BigInt {
     typedef unsigned short US;
@@ -456,6 +455,14 @@ namespace euler {
     Frac(BigInt _n = 0, BigInt _d = 1) : n(_n), d(_d){
       divided();
     };
+
+    BigInt numerator(void) const {
+      return n;
+    }
+
+    BigInt denominator(void) const {
+      return n;
+    }
 
     Frac& operator=(const Frac &f){
       if(&f == this) return *this;

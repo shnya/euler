@@ -131,7 +131,10 @@ namespace euler {
         is_minus = false;
         digits.clear();
         return *this;
+      }else if(y == 1){
+        return *this;
       }
+
       while(x >= y){
         count++;
         lshift(y,1);
@@ -220,7 +223,7 @@ namespace euler {
         if(digit_compare(y) >= 0){ // abs(x) >= abs(y)
           return subtractor(this, &y);
         }else{ // abs(x) < abs(y)
-          if(is_minus) is_minus = false;
+          is_minus = !is_minus;
           return subtractor(&y,this);
         }
       }
@@ -230,10 +233,10 @@ namespace euler {
     BigInt& operator-=(const BigInt &y){
       bool y_is_minus = !y.is_minus;
       if(is_minus ^ y_is_minus){
-        if(digit_compare(y) >= 0){
+        if(digit_compare(y) >= 0){  
           return subtractor(this, &y);
         }else{
-          if(is_minus) is_minus = false;
+          is_minus = !is_minus;
           return subtractor(&y,this);
         }
       }
@@ -375,6 +378,7 @@ namespace euler {
     while(v.size() != 0 && v.back() == 0)
     v.pop_back();
     */
+    if(x == 0) return o << "0";
     std::ostringstream os;
     const BigInt::Digits digits = x.data();
     for(size_t i = 0; i < digits.size(); i++){
@@ -417,20 +421,22 @@ namespace euler {
 
   class Frac {
     BigInt n,d;
-    static BigInt _gcd(BigInt m, BigInt n){
+    static BigInt _gcd(BigInt _m, BigInt _n){
+      if(_m < 0) _m = -_m;
+      if(_n < 0) _n = -_n;
       BigInt temp;
-      while(1){
-        temp = n;
-        n = m % n;
-        m = temp;
-        if(n == 0)
-          break;
+      while(_m % _n != 0){
+        temp = _n;
+        _n = _m % _n;
+        _m = temp;
       }
-      return n;
+      return _n;
     }
 
-    static BigInt _lcm (BigInt m, BigInt n){
-      return m * n / _gcd(m,n);
+    static BigInt _lcm (BigInt k, BigInt l){
+      if(k < 0) k = -k;
+      if(l < 0) l = -l;
+      return k * l / _gcd(k,l);
     }
 
     void divided(){
@@ -448,6 +454,48 @@ namespace euler {
       divided();
     };
 
+    Frac& operator=(const Frac &f){
+      if(&f == this) return *this;
+      n = f.n;
+      d = f.d;
+      return *this;
+    }
+
+    Frac& operator+=(const Frac &f){
+      BigInt m = _lcm(d,f.d);
+      n = n * (m / d) + f.n * (m / f.d);
+      d = m;
+      divided();
+      return *this;
+    }
+    Frac& operator-=(const Frac &f){
+      BigInt m = _lcm(d,f.d);
+      n = n * (m / d) - f.n * (m / f.d);
+      d = m;
+      divided();
+      return *this;
+    }
+
+    Frac& operator*=(const Frac &f){
+      n *= f.n;
+      d *= f.d;
+      divided();
+      return *this;
+    }
+
+    Frac& operator/=(const Frac &f){
+      n *= f.d;
+      d *= f.n;
+      divided();
+      return *this;
+    }
+
+    friend bool operator==(const Frac &x, const Frac &y);
+    friend bool operator!=(const Frac &x, const Frac &y);
+    friend bool operator>(const Frac &x, const Frac &y);
+    friend bool operator>=(const Frac &x, const Frac &y);
+    friend bool operator<(const Frac &x, const Frac &y);
+    friend bool operator<=(const Frac &x, const Frac &y);
     friend Frac operator+(const Frac &a, const Frac &b);
     friend Frac operator-(const Frac &a, const Frac &b);
     friend Frac operator*(const Frac &a, const Frac &b);
@@ -456,25 +504,75 @@ namespace euler {
   };
 
   Frac operator+(const Frac &a, const Frac &b){
-    BigInt m = Frac::_lcm(a.d,b.d);
-    return Frac((a.n * (m / a.d)) + (b.n * (m / b.d)), m);
+    Frac res(a);
+    res += b;
+    return res;
   }
 
   Frac operator-(const Frac &a, const Frac &b){
-    BigInt m = Frac::_lcm(a.d,b.d);
-    return Frac((a.n * (m / a.d)) - (b.n * (m / b.d)), m);
+    Frac res(a);
+    res -= b;
+    return res;
   }
 
   Frac operator*(const Frac &a, const Frac &b){
-    return Frac(a.n * b.n, a.d * b.d);
+    Frac res(a);
+    res *= b;
+    return res;
   }
 
   Frac operator/(const Frac &a, const Frac &b){
-    return Frac(a.n * b.d, a.d * b.n);
+    Frac res(a);
+    res /= b;
+    return res;
   }
 
+  bool operator==(const Frac &x, const Frac &y){
+    if(x.n == y.n && x.d == y.d)
+      return true;
+    else
+      return false;
+  }
+
+  bool operator!=(const Frac &x, const Frac &y){
+    if(x == y)
+      return false;
+    else
+      return true;
+  }
+
+  bool operator>(const Frac &x, const Frac &y){
+    Frac sub = x - y;
+    if(sub.n > 0)
+      return true;
+    else
+      return false;
+  }
+
+  bool operator>=(const Frac &x, const Frac &y){
+    if(x == y || x > y)
+      return true;
+    else
+      return false;
+  }
+
+  bool operator<(const Frac &x, const Frac &y){
+    if(y > x)
+      return true;
+    else
+      return false;
+  }
+
+  bool operator<=(const Frac &x, const Frac &y){
+    if(x == y || y > x)
+      return true;
+    else
+      return false;
+  }
+
+
   std::ostream& operator<<(std::ostream &o, const Frac &a){
-    o << a.n << "/" << a.d;   return o;
+    return o << a.n << "/" << a.d;
   }
 }
 

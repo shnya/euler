@@ -134,7 +134,7 @@ namespace euler {
       x.is_minus = false;
       y.is_minus = false;
       if(y == 0){
-        throw std::runtime_error("floating point error");
+        throw std::runtime_error("divided by zero");
       }else if(y == 1){
         return *this;
       }

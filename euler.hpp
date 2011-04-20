@@ -132,7 +132,6 @@ namespace euler {
 
     BigInt& divider(const BigInt &yy){
       BigInt y = yy, x = *this;
-      int count = 0;
       x.is_minus = false;
       y.is_minus = false;
       if(y == 0){
@@ -140,6 +139,7 @@ namespace euler {
       }else if(y == 1){
         return *this;
       }
+      int count = 0;
       while(x >= y){
         count++;
         lshift(y,1);
@@ -151,7 +151,7 @@ namespace euler {
       }
       rshift(y,1);
       count--;
-      Digits res_d;
+      fill(digits.begin(),digits.end(),0);
       for(int i = count; i >= 0; i--){
         int div;
         size_t xsize = x.digitnum();
@@ -166,12 +166,9 @@ namespace euler {
           x += y;
           --div;
         }
-        res_d.push_back(div);
+        digits[count] = div;
         rshift(y,1);
       }
-      reverse(res_d.begin(),res_d.end());
-      digits = res_d;
-
       truncate();
       return *this;
     }

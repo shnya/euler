@@ -591,7 +591,6 @@ namespace euler {
       return false;
   }
 
-
   std::ostream& operator<<(std::ostream &o, const Frac &a){
     return o << a.n << "/" << a.d;
   }

@@ -242,7 +242,6 @@ namespace euler {
       return adder(y);
     }
 
-
     BigInt& operator*=(const BigInt &y){
       is_minus ^= y.is_minus;
       return multiplier(y);
@@ -375,7 +374,6 @@ namespace euler {
     else
       return false;
   }
-
 
   std::ostream& operator<<(std::ostream &o, const BigInt &x){
     /*

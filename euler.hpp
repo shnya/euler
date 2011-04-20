@@ -394,7 +394,7 @@ namespace euler {
     */
     if(x == 0) return o << "0";
     std::ostringstream os;
-    const BigInt::Digits digits = x.data();
+    const BigInt::Digits &digits = x.data();
     for(size_t i = 0; i < digits.size(); i++){
       BigInt::UI k = digits[i];
       for(BigInt::UI j = 1; j < BigInt::N; j *= 10){

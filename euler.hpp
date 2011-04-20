@@ -455,6 +455,7 @@ namespace euler {
     }
 
     void divided(){
+      if(n == 0) return;
       BigInt m = _gcd(n,d);
       if(d.sign()){
         d.sign(!d.sign());

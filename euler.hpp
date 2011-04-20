@@ -178,7 +178,7 @@ namespace euler {
     // x > y = 1
     // x < y = -1
     // x == y = 0
-    int flg_compare(const BigInt &y) const {
+    int sign_compare(const BigInt &y) const {
       if(is_minus && !y.is_minus) return -1;  // x = -1, y =  1  => x < y = -1
       if(!is_minus && y.is_minus) return 1;   // x =  1, y = -1  => x > y =  1
       return 0;
@@ -339,7 +339,7 @@ namespace euler {
   }
 
   bool operator==(const BigInt &x, const BigInt &y){
-    return x.flg_compare(y) == 0 && x.digit_compare(y) == 0;
+    return x.sign_compare(y) == 0 && x.digit_compare(y) == 0;
   }
 
   bool operator!=(const BigInt &x, const BigInt &y){
@@ -350,19 +350,19 @@ namespace euler {
   }
 
   bool operator>(const BigInt &x, const BigInt &y){
-    int flg_compare = x.flg_compare(y);
+    int sign_compare = x.sign_compare(y);
     int digit_compare = x.digit_compare(y);
     if(x.is_minus) digit_compare = -digit_compare;
-    return x.flg_compare(y) > 0 ||
-      (flg_compare == 0 && digit_compare > 0);
+    return x.sign_compare(y) > 0 ||
+      (sign_compare == 0 && digit_compare > 0);
   }
 
   bool operator>=(const BigInt &x, const BigInt &y){
-    int flg_compare = x.flg_compare(y);
+    int sign_compare = x.sign_compare(y);
     int digit_compare = x.digit_compare(y);
     if(x.is_minus) digit_compare = -digit_compare;
-    return flg_compare > 0 ||
-      (flg_compare == 0 && x.digit_compare(y) >= 0);
+    return sign_compare > 0 ||
+      (sign_compare == 0 && x.digit_compare(y) >= 0);
   }
 
   bool operator<(const BigInt &x, const BigInt &y){

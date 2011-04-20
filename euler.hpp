@@ -53,14 +53,15 @@ namespace euler {
       digits.resize(size,0);
       for(size_t i = 0; i < size; i++){
         UI n = 0;
-        if(x->nth(i) > y->nth(i)){
-          n = x->nth(i) - y->nth(i);
+        UI xi = x->nth(i), yi = y->nth(i);
+        if(xi > yi){
+          n = xi - yi;
           if(carry){
             n--;
             carry = false;
           }
-        }else if(y->nth(i) > x->nth(i)){
-          n = N - (y->nth(i) - x->nth(i));
+        }else if(yi > xi){
+          n = N - (yi - xi);
           if(carry){
             n--;
           }
@@ -94,38 +95,40 @@ namespace euler {
     }
 
     BigInt& multiplier(const BigInt &y){
-      Digits res(digitnum() + y.digitnum() + 1,0);
-      size_t xsize = digitnum(), ysize = y.digitnum();
-      for(size_t i = 0; i < xsize; ++i){
+      Digits x_digits(digits);
+      const Digits& y_digits = y.digits;
+      fill(digits.begin(),digits.end(),0);
+      digits.resize(digits.size() + y_digits.size() + 1,0);
+      for(size_t i = 0; i < x_digits.size(); ++i){
         UI carry = 0;
-        for(size_t j = 0; j < ysize; ++j){
-          UI n = nth(i) * y.nth(j) + carry;
+        for(size_t j = 0; j < y_digits.size(); ++j){
+          UI n = static_cast<UI>(x_digits[i]) *
+            static_cast<UI>(y_digits[j]) + carry;
           if(n >= N){
             carry = n / N;
             n %= N;
           }else{
             carry = 0;
           }
-          n += res[i+j];
+          n += static_cast<UI>(digits[i+j]);
           if(n > N - 1){
             carry++;
             n -= N;
           }
-          res[i+j] = n;
+          digits[i+j] = n;
         }
-        size_t j = ysize;
+        size_t j = y_digits.size();
         while(carry != 0){
-          UI n = carry + res[i+j];
+          UI n = carry + static_cast<UI>(digits[i+j]);
           carry = n / N;
           if(n >= N){
             n %= N;
           }
-          res[i+j] = n;
+          digits[i+j] = n;
           j++;
         }
-        res[i+ysize] += carry;
+        digits[i+y_digits.size()] += carry;
       }
-      digits = res;
       truncate();
       return *this;
     }

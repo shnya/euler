@@ -97,8 +97,8 @@ namespace euler {
     BigInt& multiplier(const BigInt &y){
       Digits x_digits(digits);
       const Digits& y_digits = y.digits;
-      fill(digits.begin(),digits.end(),0);
-      digits.resize(digits.size() + y_digits.size() + 1,0);
+      digits.clear();
+      digits.resize(x_digits.size() + y_digits.size() + 1,0);
       for(size_t i = 0; i < x_digits.size(); ++i){
         UI carry = 0;
         for(size_t j = 0; j < y_digits.size(); ++j){

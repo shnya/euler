@@ -131,8 +131,8 @@ namespace euler {
     BigInt& divider(const BigInt &yy){
       BigInt y = yy, x = *this;
       int count = 0;
-      if(x < 0) x = -x;
-      if(y < 0) y = -y;
+      x.is_minus = false;
+      y.is_minus = false;
       if(y == 0){
         throw std::runtime_error("floating point error");
       }else if(y == 1){
@@ -247,10 +247,6 @@ namespace euler {
       return adder(y);
     }
 
-    BigInt& operator-(void){
-      is_minus = !is_minus;
-      return *this;
-    }
 
     BigInt& operator*=(const BigInt &y){
       is_minus ^= y.is_minus;
@@ -281,8 +277,12 @@ namespace euler {
       return digits;
     }
 
-    bool flg(void) const {
+    bool sign(void) const {
       return is_minus;
+    }
+
+    void sign(bool _is_minus) {
+      is_minus = _is_minus;
     }
 
     std::string str(void) const {
@@ -298,11 +298,18 @@ namespace euler {
     friend bool operator<(const BigInt &x, const BigInt &y);
     friend bool operator<=(const BigInt &x, const BigInt &y);
     friend BigInt operator+(const BigInt &x, const BigInt &y);
+    friend BigInt operator-(const BigInt &x);
     friend BigInt operator-(const BigInt &x, const BigInt &y);
     friend BigInt operator*(const BigInt &x, const BigInt &y);
     friend BigInt operator/(const BigInt &x, const BigInt &y);
     friend std::ostream& operator<<(std::ostream &o, const BigInt &x);
   };
+
+  BigInt operator-(const BigInt &x){
+    BigInt res(x);
+    res.is_minus = !res.is_minus;
+    return res;
+  }
 
   BigInt operator+(const BigInt &x, const BigInt &y){
     BigInt res(x);
@@ -432,8 +439,8 @@ namespace euler {
   class Frac {
     BigInt n,d;
     static BigInt _gcd(BigInt _m, BigInt _n){
-      if(_m < 0) _m = -_m;
-      if(_n < 0) _n = -_n;
+      _m.sign(false);
+      _m.sign(false);
       BigInt temp;
       while(_m % _n != 0){
         temp = _n;
@@ -444,8 +451,8 @@ namespace euler {
     }
 
     static BigInt _lcm (BigInt k, BigInt l){
-      if(k < 0) k = -k;
-      if(l < 0) l = -l;
+      k.sign(false);
+      l.sign(false);
       return k * l / _gcd(k,l);
     }
 

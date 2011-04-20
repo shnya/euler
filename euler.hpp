@@ -41,6 +41,12 @@ namespace euler {
       }
     }
 
+    void truncate(void){
+      while(digits.size() != 0 && digits.back() == 0)
+        digits.pop_back();
+      if(digitnum() == 0) is_minus = false;
+    }
+
     BigInt& subtractor(const BigInt *x, const BigInt *y){
       bool carry = false;
       size_t size = x->digitnum();
@@ -68,9 +74,7 @@ namespace euler {
         }
         digits[i] = n;
       }
-      while(digits.size() != 0 && digits.back() == 0)
-        digits.pop_back();
-
+      truncate();
       return *this;
     }
 
@@ -85,8 +89,7 @@ namespace euler {
       }
       if(carry)
         digits.push_back(carry);
-      while(digits.size() != 0 && digits.back() == 0)
-        digits.pop_back();
+      truncate();
       return *this;
     }
 
@@ -123,8 +126,7 @@ namespace euler {
         res[i+ysize] += carry;
       }
       digits = res;
-      while(digits.size() != 0 && digits.back() == 0)
-        digits.pop_back();
+      truncate();
       return *this;
     }
 
@@ -170,8 +172,7 @@ namespace euler {
       reverse(res_d.begin(),res_d.end());
       digits = res_d;
 
-      while(digits.size() != 0 && digits.back() == 0)
-        digits.pop_back();
+      truncate();
       return *this;
     }
 

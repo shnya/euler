@@ -448,10 +448,10 @@ namespace euler {
       return _n;
     }
 
-    static BigInt _lcm (BigInt k, BigInt l){
-      k.sign(false);
-      l.sign(false);
-      return k * l / _gcd(k,l);
+    static BigInt _lcm (BigInt _m, BigInt _n){
+      _m.sign(false);
+      _n.sign(false);
+      return _m * _n / _gcd(_m,_n);
     }
 
     void divided(){

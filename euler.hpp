@@ -358,11 +358,10 @@ namespace euler {
   }
 
   bool operator>=(const BigInt &x, const BigInt &y){
-    int sign_compare = x.sign_compare(y);
-    int digit_compare = x.digit_compare(y);
-    if(x.is_minus) digit_compare = -digit_compare;
-    return sign_compare > 0 ||
-      (sign_compare == 0 && x.digit_compare(y) >= 0);
+    if(x == y || x > y)
+      return true;
+    else
+      return false;
   }
 
   bool operator<(const BigInt &x, const BigInt &y){

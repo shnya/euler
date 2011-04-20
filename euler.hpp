@@ -438,9 +438,11 @@ namespace euler {
       _m.sign(false);
       _m.sign(false);
       BigInt temp;
-      while(_m % _n != 0){
+      while(1){
         temp = _n;
         _n = _m % _n;
+        if(_n == 0)
+          return temp;
         _m = temp;
       }
       return _n;

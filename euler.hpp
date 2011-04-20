@@ -166,7 +166,7 @@ namespace euler {
           div = x.nth(xsize-1) / y.nth(ysize-1);
         }
         x -= (y * div);
-        while(div > 0 && x < 0){
+        while(div > 0 && x.is_minus){
           x += y;
           --div;
         }
@@ -454,7 +454,7 @@ namespace euler {
 
     void divided(){
       BigInt m = _gcd(n,d);
-      if(d < 0){
+      if(d.sign()){
         d.sign(!d.sign());
         n.sign(!n.sign());
       }

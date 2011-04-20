@@ -154,7 +154,8 @@ namespace euler {
       }
       rshift(y,1);
       count--;
-      fill(digits.begin(),digits.end(),0);
+      digits.clear();
+      digits.resize(count+1,0);
       for(int i = count; i >= 0; i--){
         int div;
         size_t xsize = x.digitnum();

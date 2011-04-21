@@ -47,13 +47,13 @@ namespace euler {
       if(digitnum() == 0) is_minus = false;
     }
 
-    BigInt& subtractor(const BigInt *x, const BigInt *y){
+    BigInt& subtractor(const BigInt &x, const BigInt &y){
       bool carry = false;
-      size_t size = x->digitnum();
+      size_t size = x.digitnum();
       digits.resize(size,0);
       for(size_t i = 0; i < size; i++){
         UI n = 0;
-        UI xi = x->nth(i), yi = y->nth(i);
+        UI xi = x.nth(i), yi = y.nth(i);
         if(xi > yi){
           n = xi - yi;
           if(carry){
@@ -236,10 +236,10 @@ namespace euler {
     BigInt& operator+=(const BigInt &y){
       if(is_minus ^ y.is_minus){
         if(digit_compare(y) >= 0){ // abs(x) >= abs(y)
-          return subtractor(this, &y);
+          return subtractor(*this, y);
         }else{ // abs(x) < abs(y)
           is_minus = !is_minus;
-          return subtractor(&y,this);
+          return subtractor(y,*this);
         }
       }
       return adder(y);
@@ -254,10 +254,10 @@ namespace euler {
       bool y_is_minus = !y.is_minus;
       if(is_minus ^ y_is_minus){
         if(digit_compare(y) >= 0){
-          return subtractor(this, &y);
+          return subtractor(*this, y);
         }else{
           is_minus = !is_minus;
-          return subtractor(&y,this);
+          return subtractor(y,*this);
         }
       }
       return adder(y);

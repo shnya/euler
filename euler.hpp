@@ -81,15 +81,15 @@ namespace euler {
 
     BigInt& adder(const BigInt &x){
       size_t size = std::max(x.digitnum(),digitnum());
-      digits.resize(size,0);
+      digits.resize(size+1,0);
       UI carry = 0;
-      for(size_t i = 0; i < size; i++){
+      for(size_t i = 0; i < x.digitnum(); i++){
         UI n = carry + x.nth(i) + this->nth(i);
         digits[i] = n % N;
         carry = n / N;
       }
       if(carry)
-        digits.push_back(carry);
+        digits[x.digitnum()]++;
       truncate();
       return *this;
     }

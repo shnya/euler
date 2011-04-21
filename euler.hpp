@@ -94,7 +94,7 @@ namespace euler {
       return *this;
     }
 
-    BigInt& multiplier(const BigInt &y){
+    BigInt& multiplier(BigInt y){
       Digits x_digits(digits);
       const Digits& y_digits = y.digits;
       digits.clear();
@@ -133,13 +133,17 @@ namespace euler {
       return *this;
     }
 
-    BigInt& divider(const BigInt &yy){
+    BigInt& divider(const BigInt &yy, bool is_mod){
       BigInt y = yy, x = *this;
       x.is_minus = false;
       y.is_minus = false;
       if(y == 0){
         throw std::runtime_error("divided by zero");
       }else if(y == 1){
+        if(is_mod){
+          is_minus = false;
+          digits.clear();
+        }
         return *this;
       }
       int count = 0;
@@ -148,8 +152,10 @@ namespace euler {
         lshift(y,1);
       }
       if(count == 0){
-        is_minus = false;
-        digits.clear();
+        if(!is_mod){
+          is_minus = false;
+          digits.clear();
+        }
         return *this;
       }
       rshift(y,1);
@@ -161,9 +167,12 @@ namespace euler {
         size_t xsize = x.digitnum();
         size_t ysize = y.digitnum();
         if(xsize > 1 && xsize != ysize){
-          div = (x.nth(xsize-1) * N + x.nth(xsize-2)) / y.nth(ysize-1);
+          UI x_1 = x.digits[xsize-1], x_2 = x.digits[xsize-2];
+          UI y_1 = y.digits[ysize-1];
+          div = (x_1 * N + x_2) / y_1;
         }else{
-          div = x.nth(xsize-1) / y.nth(ysize-1);
+          UI x_1 = x.digits[xsize-1], y_1 = y.digits[ysize-1];
+          div = x_1 / y_1;
         }
         x -= (y * div);
         while(div > 0 && x.is_minus){
@@ -173,6 +182,7 @@ namespace euler {
         digits[count] = div;
         rshift(y,1);
       }
+      if(is_mod) digits = x.digits;
       truncate();
       return *this;
     }
@@ -234,6 +244,11 @@ namespace euler {
     }
 
     BigInt& operator-=(const BigInt &y){
+      if(this == &y){
+        digits.clear();
+        is_minus = false;
+        return *this;
+      }
       bool y_is_minus = !y.is_minus;
       if(is_minus ^ y_is_minus){
         if(digit_compare(y) >= 0){
@@ -253,11 +268,11 @@ namespace euler {
 
     BigInt& operator/=(const BigInt &y){
       is_minus ^= y.is_minus;
-      return divider(y);
+      return divider(y,false);
     }
 
     BigInt& operator%=(const BigInt &y){
-      return *this -= *this / y * y;
+      return divider(y,true);
     }
 
     BigInt& operator=(const BigInt &x){

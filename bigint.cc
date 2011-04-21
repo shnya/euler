@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     }
   }
   cout << sum << endl;
+  cout << pow(BigInt(2),1000) << endl;
   //cout << pow(BigInt(65535),65535) << endl;
   /*
   BigInt a(3),b(2);

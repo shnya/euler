@@ -94,41 +94,43 @@ namespace euler {
       return *this;
     }
 
-    BigInt& multiplier(BigInt y){
-      Digits x_digits(digits);
+    BigInt& multiplier(const BigInt &y){
+      const Digits& x_digits = digits;
       const Digits& y_digits = y.digits;
-      digits.clear();
-      digits.resize(x_digits.size() + y_digits.size() + 1,0);
+      Digits res(digits.size() + y_digits.size() + 1, 0);
       for(size_t i = 0; i < x_digits.size(); ++i){
         UI carry = 0;
         for(size_t j = 0; j < y_digits.size(); ++j){
-          UI n = static_cast<UI>(x_digits[i]) *
-            static_cast<UI>(y_digits[j]) + carry;
+          UI xi = x_digits[i], yi = y_digits[j];
+          UI n = xi * yi + carry;
           if(n >= N){
             carry = n / N;
             n %= N;
           }else{
             carry = 0;
           }
-          n += static_cast<UI>(digits[i+j]);
+          UI res_ij = res[i+j];
+          n += res_ij;
           if(n > N - 1){
             carry++;
             n -= N;
           }
-          digits[i+j] = n;
+          res[i+j] = n;
         }
         size_t j = y_digits.size();
         while(carry != 0){
-          UI n = carry + static_cast<UI>(digits[i+j]);
+          UI res_ij = res[i+j];
+          UI n = carry + res_ij;
           carry = n / N;
           if(n >= N){
             n %= N;
           }
-          digits[i+j] = n;
+          res[i+j] = n;
           j++;
         }
-        digits[i+y_digits.size()] += carry;
+        res[i+y_digits.size()] += carry;
       }
+      digits = res;
       truncate();
       return *this;
     }
@@ -295,7 +297,7 @@ namespace euler {
     }
 
     void sign(bool _is_minus) {
-      is_minus = _is_minus;
+      if(digits.size() != 0) is_minus = _is_minus;
     }
 
     std::string str(void) const {

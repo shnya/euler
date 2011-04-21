@@ -1,6 +1,13 @@
 #ifndef EULER_HPP
 #define EULER_HPP
 
+/*
+ * Project Euler専用ライブラリ
+ * Bugがまだあるかもしれませんが、使う場合は-O2使ってください。
+ * このコードはインライン展開で最適化されることを想定して記述しています。
+ */
+
+
 #include <vector>
 #include <algorithm>
 #include <iostream>

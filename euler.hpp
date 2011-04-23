@@ -187,7 +187,7 @@ namespace euler {
           x += y;
           --div;
         }
-        digits[count] = div;
+        digits[i] = div;
         rshift(y,1);
       }
       if(is_mod) digits = x.digits;

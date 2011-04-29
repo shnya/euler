@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
 {
   //BigInt x(61181), y(25342);
   //cout << x % y << endl;
+  /*
   Frac d(1,2);
   int sum = 0;
   for(int i = 0; i < 1000; i++){
@@ -42,6 +43,7 @@ int main(int argc, char *argv[])
     }
   }
   cout << sum << endl;
+  */
   /*
   cout << pow(BigInt(2),1000) << endl;
 
@@ -61,5 +63,6 @@ int main(int argc, char *argv[])
   cout << "-3 % 2 = " <<  -a % b << endl;
   cout << "-3 % -2 = " <<  -a % -b << endl;
   */
+  cout << pow(BigInt(99),1024) << endl;
   return 0;
 }

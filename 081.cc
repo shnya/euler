@@ -68,11 +68,22 @@ split(const std::string &str, const std::string &delim){
   return res;
 }
 
-int dp[81][81];
+int maxn = 1000000000;
+#include <queue>
+
+struct node {
+  int x,y,pt;
+};
+bool operator<(const node &a, const node &b){
+  return a.pt < b.pt;
+}
+bool operator>(const node &a, const node &b){
+  return a.pt > b.pt;
+}
 
 int main(int argc, char *argv[]){
   ios::sync_with_stdio(false);
-  ifstream ifs("matrix.txt");
+  ifstream ifs("matrix081.txt");
   string line;
   vector<vector<int> > v;
   while(getline(ifs,line)){
@@ -85,22 +96,37 @@ int main(int argc, char *argv[]){
     v.push_back(vfs);
   }
   //cout << v.size() << endl;
-  REP(i,SZ(v)) REP(j,SZ(v[i])) dp[i][j] = 1000000000;
-  dp[0][0] = v[0][0];
-  for(size_t i = 0; i < v.size(); i++){
-    for(size_t j = 0; j < v[i].size(); j++){
-      if(i == 0 && j == 0) continue;
-      if(j != 0){
-        dp[i][j] = min(dp[i][j-1]+v[i][j],dp[i][j]);
+
+  int dp[81][81];
+  REP(i,SZ(v)) REP(j,SZ(v[i])) dp[i][j] = maxn;
+  priority_queue<node,vector<node>,greater<node> > Q;
+  REP(j,SZ(v[0])) Q.push((node){0,j,v[j][0]});
+  while(!Q.empty()){
+    node n = Q.top();
+    Q.pop();
+    cout << "x " << n.x << " y = " << n.y <<
+      " pt = " << n.pt << endl;
+    if(n.y != 0){
+      if(dp[n.y-1][n.x] > n.pt+v[n.y-1][n.x]){
+        dp[n.y-1][n.x] = n.pt+v[n.y-1][n.x];
+        Q.push((node){n.x,n.y-1,n.pt+v[n.y-1][n.x]});
       }
-      if(i != 0){
-        dp[i][j] = min(dp[i-1][j]+v[i][j],dp[i][j]);
+    }
+    if(n.y != 79){
+      if(dp[n.y+1][n.x] > n.pt+v[n.y+1][n.x]){
+        dp[n.y+1][n.x] = n.pt+v[n.y+1][n.x];
+        Q.push((node){n.x,n.y+1,n.pt+v[n.y+1][n.x]});
+      }
+    }
+    if(n.x != 79){
+      if(dp[n.y][n.x+1] > n.pt+v[n.y][n.x+1]){
+        dp[n.y][n.x+1] = n.pt+v[n.y][n.x+1];
+        Q.push((node){n.x+1,n.y,n.pt+v[n.y][n.x+1]});
       }
     }
   }
-
-  cout << dp[79][79] << endl;
-
-
+  int res = maxn;
+  REP(j,SZ(v[0])) res = min(dp[j][79],res);
+  cout << res << endl;
   return 0;
 }

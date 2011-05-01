@@ -13,9 +13,18 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
+#include <limits>
 
 
 namespace euler {
+
+  /*
+    template <unsigned int N> struct LOG10
+    {  enum { value = LOG10<(N / 10)>::value + 1 }; };
+    template<> struct LOG10<1> { enum { value = 0 }; };
+    template<> struct LOG10<0> { enum { value = 0 }; };
+  */
+
   class BigInt {
     typedef unsigned short US;
     typedef unsigned int UI;
@@ -25,6 +34,7 @@ namespace euler {
     const static UI N = 10000;
     bool is_minus;
     Digits digits;
+    //int precision;
 
     int nth(size_t n) const {
       if(n < digits.size())
@@ -227,8 +237,10 @@ namespace euler {
       return 0;
     }
 
+
   public:
-    BigInt(long n = 0) : is_minus(false) {
+    BigInt(long n = 0 /* , unsigned int _precision = 0 */)
+      : is_minus(false) {
       if(n < 0){
         is_minus = true;
         n = -n;
@@ -237,6 +249,14 @@ namespace euler {
         digits.push_back(n % N);
         n /= N;
       }
+      /* not_support precision
+         precision = _precision;
+         if(precision != 0){
+         int log10N = LOG10<N>::value;
+         precision = (precision + log10N - 1) / log10N * log10N;
+         lshift(*this,precision/log10N);
+         }
+      */
     }
 
     BigInt& operator+=(const BigInt &y){
@@ -296,6 +316,21 @@ namespace euler {
 
     const Digits& data(void) const {
       return digits;
+    }
+
+    long toint(void) const {
+      if(*this >= std::numeric_limits<int>::max())
+        return std::numeric_limits<int>::max();
+      if(*this <= std::numeric_limits<int>::min())
+        return std::numeric_limits<int>::min();
+      int res;
+      for(Digits::const_iterator itr = digits.begin();
+          itr != digits.end(); ++itr){
+        res *= N;
+        res += *itr;
+      }
+      if(is_minus) res = -res;
+      return res;
     }
 
     bool sign(void) const {
@@ -417,7 +452,9 @@ namespace euler {
     if(x == 0) return o << "0";
     std::ostringstream os;
     const BigInt::Digits &digits = x.data();
+    //size_t precision_level = x.precision / LOG10<BigInt::N>::value;
     for(size_t i = 0; i < digits.size(); i++){
+      //if(i == precision_level) os << ".";
       BigInt::UI k = digits[i];
       for(BigInt::UI j = 1; j < BigInt::N; j *= 10){
         os << (k % 10);

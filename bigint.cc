@@ -63,6 +63,9 @@ int main(int argc, char *argv[])
   cout << "-3 % 2 = " <<  -a % b << endl;
   cout << "-3 % -2 = " <<  -a % -b << endl;
   */
-  cout << pow(BigInt(99),1024) << endl;
+  //cout << LOG10<10000>::value << endl;
+  BigInt a(1);
+  
+  //cout << pow(BigInt(99),1024) << endl;
   return 0;
 }
